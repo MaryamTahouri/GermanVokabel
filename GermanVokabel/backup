@@ -1,0 +1,427 @@
+#####################################################flashcard:
+{% extends "vocabulary/base_generic.html" %}
+
+{% block content %}
+<h2 class="centered-title">Deine Karteikarten</h2>
+<div class="flashcard-container">
+    {% if flashcards %}
+        <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner">
+                <!-- بخش جلوی فلش کارت -->
+                <div class="flashcard-front">
+                    <p id="german-word"></p> <!-- مقداردهی با جاوااسکریپت -->
+                </div>
+
+                <!-- بخش پشت فلش کارت -->
+                <div class="flashcard-back">
+                    <p id="translations"></p> <!-- مقداردهی با جاوااسکریپت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- کنترل‌ها -->
+        <div class="controls">
+            <button id="prev-btn">❮ Previous</button>
+            <button id="next-btn">Next ❯</button>
+            <form id="delete-form" method="post">
+                {% csrf_token %}
+                <button id="delete-btn" type="submit">حذف</button>
+            </form>
+        </div>
+    {% else %}
+        <p>شما فلش کارتی ندارید.</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let flashcards = JSON.parse('{{ flashcards|safe|escapejs }}'); // ارسال داده‌ها
+    console.log('Loaded flashcards:', flashcards); // بررسی داده‌ها در کنسول
+
+    let currentIndex = 0;
+
+    function updateFlashcard() {
+        if (flashcards.length === 0) {
+            // اگر فلش‌کارت‌ها خالی است، پیام مناسب نمایش داده شود
+            document.querySelector('.flashcard-container').innerHTML = '<p>شما فلش کارتی ندارید.</p>';
+            return;
+        }
+
+        const germanWord = document.getElementById('german-word');
+        const translations = document.getElementById('translations');
+
+        germanWord.innerText = flashcards[currentIndex].word.german_word;
+        translations.innerHTML = `<strong>English:</strong> ${flashcards[currentIndex].word.english_word || 'Not available'}<br>
+                                   <strong>Farsi:</strong> ${flashcards[currentIndex].word.farsi_word || 'Not available'}`;
+    }
+
+    function showPrevFlashcard() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateFlashcard();
+        }
+    }
+
+    function showNextFlashcard() {
+        if (currentIndex < flashcards.length - 1) {
+            currentIndex++;
+            updateFlashcard();
+        }
+    }
+
+    document.getElementById('flashcard').addEventListener('click', function () {
+        this.classList.toggle('flipped');
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', showPrevFlashcard);
+    document.getElementById('next-btn').addEventListener('click', showNextFlashcard);
+
+    // دکمه حذف فلش‌کارت
+    const deleteButton = document.getElementById('delete-btn');
+    deleteButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const flashcardId = flashcards[currentIndex].id;
+
+        fetch(`/remove-flashcard/${flashcardId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log(data.message);
+
+                // حذف فلش‌کارت از آرایه
+                flashcards.splice(currentIndex, 1);
+
+                if (flashcards.length > 0) {
+                    // اگر هنوز فلش‌کارت وجود دارد، به‌روزرسانی انجام شود
+                    currentIndex = currentIndex === flashcards.length ? currentIndex - 1 : currentIndex;
+                    updateFlashcard();
+                } else {
+                    // اگر فلش‌کارت‌ها خالی شدند، پیام نمایش داده شود
+                    document.querySelector('.flashcard-container').innerHTML = '<p>شما فلش کارتی ندارید.</p>';
+                }
+            } else {
+                console.error('Error removing flashcard:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // مقداردهی اولیه
+    updateFlashcard();
+});
+
+</script>
+{% endblock %}
+
+
+#########################################################viwes.py:
+from django.shortcuts import render, redirect, get_object_or_404
+import json
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate, logout
+from .models import Word, Flashcard
+from .utils import generate_audio_file
+import os
+from django.conf import settings
+from .forms import RegisterForm
+from django.contrib.auth.decorators import login_required
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # ورود خودکار کاربر
+            return redirect('home')  # هدایت به صفحه اصلی
+    else:
+        form = RegisterForm()
+    return render(request, 'vocabulary/register.html', {'form': form})
+
+
+def custom_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return render(request, 'vocabulary/logout.html')
+    return redirect('home')  # در صورت نیاز به تغییر مسیر پیش فرض
+
+
+def home(request):
+    return render(request, 'vocabulary/search.html')  # نمایش فایل search.html به جای home.html
+
+def word_list(request):
+    words = Word.objects.all()  # Alle Wörter aus der Datenbank abrufen
+
+    # Audiodateien für jedes Wort generieren
+    for word in words:
+        audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', f"{word.german_word}.mp3")
+        if not os.path.exists(audio_path):  # Nur generieren, wenn die Datei fehlt
+            generate_audio_file(word.german_word)
+
+    return render(request, 'vocabulary/word_list.html', {'words': words})
+
+
+def search_word(request):
+    query = request.GET.get('query')  # دریافت کلمه جستجو شده
+    words = None
+    flashcard_ids = []  # لیست آی‌دی کلمات در فلش‌کارت کاربر
+    message = ""
+
+    if query:  # اگر کاربر چیزی جستجو کرده باشد
+        words = Word.objects.filter(german_word__iexact=query)  # جستجو بر اساس کلمه آلمانی
+        if not words.exists():
+            message = f"Es wurden keine Einträge für das Wort '{query}' gefunden."
+        else:
+            # بررسی کنید که کدام کلمات در فلش‌کارت کاربر هستند
+            if request.user.is_authenticated:  # بررسی لاگین بودن کاربر
+                flashcard_ids = Flashcard.objects.filter(user=request.user, word__in=words).values_list('word_id', flat=True)
+    else:
+        message = "Bitte geben Sie ein Wort zum Suchen ein..."
+
+    return render(request, 'vocabulary/search.html', {
+        'words': words,
+        'flashcard_ids': list(flashcard_ids),  # ارسال لیست آی‌دی‌های فلش‌کارت
+        'message': message,
+        'query': query
+    })
+
+
+@login_required
+def add_to_flashcards(request):
+    if request.method == "POST":
+        word_id = request.POST.get("word_id")
+        if request.user.is_authenticated and word_id:
+            word = Word.objects.get(id=word_id)
+            # بررسی کنید که آیا کلمه قبلاً در فلش‌کارت وجود دارد
+            flashcard, created = Flashcard.objects.get_or_create(user=request.user, word=word)
+            print(f"Flashcard created: {created}, Word: {word.german_word}")
+
+            # بازگشت به صفحه قبلی
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    return redirect('home')  # اگر مشکلی پیش آمد، به صفحه اصلی برگردید
+
+@login_required
+def flashcards(request):
+    user_flashcards = Flashcard.objects.filter(user=request.user)
+    flashcards = [
+        {
+            "id": fc.id,  # اضافه کردن ID فلش‌کارت برای هر کارت
+            "word": {
+                "german_word": fc.word.german_word,
+                "english_word": fc.word.english_word,
+                "farsi_word": fc.word.farsi_word,
+            }
+        }
+        for fc in user_flashcards
+    ]
+    print(f"Flashcards data for user {request.user}: {flashcards}")  # لاگ گرفتن برای بررسی داده‌ها
+    return render(request, 'vocabulary/flashcards.html', {'flashcards': json.dumps(flashcards)})
+
+
+@login_required
+def remove_flashcard(request, flashcard_id):
+    flashcard = get_object_or_404(Flashcard, id=flashcard_id, user=request.user)
+    flashcard.delete()
+    return redirect('flashcards')  # بازگشت به صفحه فلش‌کارت‌ها
+
+
+
+
+#########################################urls.py:
+
+
+from django.urls import path
+from . import views
+from django.contrib.auth import views as auth_views
+from .views import add_to_flashcards, flashcards
+
+urlpatterns = [
+    path('', views.home, name='home'),# Hauptseite
+    path('register/', auth_views.LoginView.as_view(template_name='vocabulary/register.html'), name='register'),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='vocabulary/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('word_list/', views.word_list, name='word_list'),
+    path('search/', views.search_word, name='search_word'),  # Hier wird 'search_word' registriert
+    path('add-to-flashcards/', add_to_flashcards, name='add_to_flashcards'),
+    path('flashcards/', views.flashcards, name='flashcards'),
+    path('remove-flashcard/<int:flashcard_id>/', views.remove_flashcard, name='remove_flashcard'),
+
+]
+
+
+#######################search
+{% extends "vocabulary/base_generic.html" %}
+{% load static %}
+
+{% block title %}Suchergebnis{% endblock %}
+
+{% block content %}
+<main>
+    <!-- فرم جستجو -->
+    <form method="get" action="{% url 'search_word' %}" class="search-form">
+        <div class="search-container">
+            <div class="flag-container">
+                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+            </div>
+            <input type="text" name="query" placeholder="Geben Sie ein deutsches Wort ein..." value="{{ query }}">
+            <button type="submit">🔍</button>
+        </div>
+    </form>
+
+    <!-- نتایج جستجو -->
+    <div class="results-container">
+        {% if query %}
+            {% if words %}
+                {% for word in words %}
+                    <!-- ردیف نتیجه -->
+                    <div class="result-row">
+                        <!-- ستون آلمانی -->
+                        <div class="result-column left-column">
+                            <div class="german-flag-text">
+                                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                {% if word and word.gender %}
+                                    <span class="gender {% if word.gender == 'm' %}masculine{% elif word.gender == 'f' %}feminine{% elif word.gender == 'n' %}neutral{% endif %}">
+                                        {% if word.gender == 'm' %} der
+                                        {% elif word.gender == 'f' %} die
+                                        {% elif word.gender == 'n' %} das
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                                <h2 class="word-type {{ word.word_type }}">
+                                    {{ word.german_word }}
+                                    {% if word.get_word_type_display %}
+                                        <small class="word-type">({{ word.get_word_type_display }})</small>
+                                    {% endif %}
+                                </h2>
+                                {% if word.audio %}
+                                    <button class="play-audio-btn" onclick="playAudio('{{ word.audio.url }}')">🔊</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- ستون انگلیسی -->
+                        <div class="result-column center-column">
+                            <div class="english-flag-text">
+                                <img src="{% static 'united_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                <p>{{ word.english_word }}</p>
+                                {% if word.english_audio %}
+                                    <button class="play-audio-btn" onclick="playAudio('{{ word.english_audio.url }}')">🔊</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- ستون فارسی -->
+                        <div class="result-column right-column">
+                            <div class="iran-flag-text">
+                                <p>{{ word.farsi_word }}</p>
+                                <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small iran-flag">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- اطلاعات اضافی -->
+                    <div class="additional-info-container">
+                        <!-- جزییات -->
+                        <div class="info-box">
+                            <h3>Details</h3>
+                            <p>Wortart: <span class="word-type-bold">{{ word.get_word_type_display }}</span></p>
+                            {% if word.word_type == 'noun' %}
+                                <p>Plural Form: <span class="word-type-bold">{{ word.plural_form }}</span></p>
+                                <p>Genitive Form: <span class="word-type-bold">{{ word.genitive_form }}</span></p>
+                            {% elif word.word_type == 'verb' %}
+                                <p>Simple Past: <span class="word-type-bold">{{ word.simple_past }}</span></p>
+                                <p>Perfekt-Partizip: <span class="word-type-bold">{{ word.past_participle }}</span></p>
+                                <p>Hilfsverb: <span class="word-type-bold">{{ word.auxiliary_verb }}</span></p>
+                            {% elif word.word_type == 'adjective' %}
+                                <p>Komparativ: <span class="word-type-bold">{{ word.comparative }}</span></p>
+                                <p>Superlativ: <span class="word-type-bold">{{ word.superlative }}</span></p>
+                            {% endif %}
+                        </div>
+
+                        <!-- تعریف -->
+                        <div class="info-box">
+                            <h3>Definition</h3>
+                            <p>{{ word.definition }}</p>
+                        </div>
+
+                        <!-- مترادف‌ها و متضادها -->
+                        <div class="info-box">
+                            <h3>Synonyme und Antonyme</h3>
+                            <div class="synonyme-box">{{ word.synonyms }}</div>
+                            <div class="antonyme-box">{{ word.antonyms }}</div>
+                        </div>
+                    </div>
+
+                    <!-- جملات نمونه -->
+                    <div class="additional-info-container">
+                        <div class="info-box">
+                            <h3>Beispiel</h3>
+                            <div class="sentence-row">
+                                <!-- جمله آلمانی -->
+                                <div class="sentence-column german-sentence">
+                                    <div class="german-flag-text">
+                                        <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                        <p>{{ word.german_example_sentence }}</p>
+                                        {% if word.audio %}
+                                            <button class="play-audio-btn" onclick="playAudio('{{ word.german_example_audio.url }}')">🔊</button>
+                                        {% endif %}
+                                        {% if word.video %}
+                                            <button class="play-video-btn" onclick="playVideo('{{ word.video.url }}')">
+                                                <img src="{% static 'video.png' %}" alt="Video Icon" class="video-icon">
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- جمله انگلیسی -->
+                                <div class="sentence-column english-sentence">
+                                    <div class="english-flag-text">
+                                        <img src="{% static 'united_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                        <p>{{ word.english_example_sentence }}</p>
+                                    </div>
+                                    {% if word.audio %}
+                                        <button class="play-audio-btn" onclick="playAudio('{{ word.english_example_audio.url }}')">🔊</button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- جمله فارسی -->
+                                <div class="sentence-column farsi-sentence">
+                                    <div class="iran-flag-text">
+                                        <p>{{ word.farsi_example_sentence }}</p>
+                                        <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- دکمه افزودن به فلش کارت -->
+                    <div class="add-to-flashcards-btn-container">
+                        {% if user.is_authenticated and word.id not in flashcard_ids %}
+                            <form method="post" action="{% url 'add_to_flashcards' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="word_id" value="{{ word.id }}">
+                                <button class="add-to-flashcards-btn" type="submit">Zu Karteikarten hinzufügen</button>
+                            </form>
+                        {% elif user.is_authenticated %}
+                            <p class="flashcard-message">Dieses Wort ist bereits in deinen Flashcards.</p>
+                        {% endif %}
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <p>Keine Ergebnisse gefunden. Bitte versuchen Sie es mit einem anderen Suchbegriff.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</main>
+
+<script src="{% static 'vocabulary/js/playAudio.js' %}"></script>
+<script src="{% static 'vocabulary/js/playVideo.js' %}"></script>
+{% endblock %}

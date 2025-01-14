@@ -1,0 +1,46 @@
+{% extends "vocabulary/base_generic.html" %}
+
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Anmelden</h2>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Benutzername -->
+        <div class="form-group">
+            <label for="username">Benutzername:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <!-- Passwort -->
+        <div class="form-group">
+            <label for="password">Passwort:</label>
+            <div class="input-container">
+                <input type="password" id="password" name="password" class="input-password" required>
+                <span onclick="togglePasswordVisibility('password')" class="password-toggle">👁️</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Anmelden</button>
+    </form>
+    <p>Haben Sie noch keinen Account? <a href="{% url 'register' %}">Hier registrieren.</a></p>
+</div>
+
+<script>
+    function togglePasswordVisibility(fieldId) {
+        const passwordField = document.getElementById(fieldId);
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "vocabulary/base_generic.html" %}
+{% load static %}
+
+{% block title %}Suchergebnis{% endblock %}
+
+{% block content %}
+<main>
+    <!-- فرم جستجو -->
+    <form method="get" action="{% url 'search_word' %}" class="search-form">
+        <div class="search-container">
+            <div class="flag-container">
+                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+            </div>
+            <input type="text" name="query" placeholder="Geben Sie ein deutsches Wort ein..." value="{{ query }}">
+            <button type="submit">🔍</button>
+        </div>
+    </form>
+
+    <!-- نتایج جستجو -->
+    <div class="results-container">
+        {% if query %}
+            {% if words %}
+                {% for word in words %}
+                    <!-- ردیف نتیجه -->
+                    <div class="result-row">
+                        <!-- ستون آلمانی -->
+                        <div class="result-column left-column">
+                            <div class="german-flag-text">
+                                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                {% if word and word.gender %}
+                                    <span class="gender {% if word.gender == 'm' %}masculine{% elif word.gender == 'f' %}feminine{% elif word.gender == 'n' %}neutral{% endif %}">
+                                        {% if word.gender == 'm' %} der
+                                        {% elif word.gender == 'f' %} die
+                                        {% elif word.gender == 'n' %} das
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                                <h2 class="word-type {{ word.word_type }}">
+                                    {{ word.german_word }}
+                                    {% if word.get_word_type_display %}
+                                        <small class="word-type">({{ word.get_word_type_display }})</small>
+                                    {% endif %}
+                                </h2>
+                                {% if word.audio %}
+                                    <button class="play-audio-btn" onclick="playAudio('{{ word.audio.url }}')">🔊</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- ستون انگلیسی -->
+                        <div class="result-column center-column">
+                            <div class="english-flag-text">
+                                <img src="{% static 'united_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                <p>{{ word.english_word }}</p>
+                                {% if word.english_audio %}
+                                    <button class="play-audio-btn" onclick="playAudio('{{ word.english_audio.url }}')">🔊</button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- ستون فارسی -->
+                        <div class="result-column right-column">
+                            <div class="iran-flag-text">
+                                <p>{{ word.farsi_word }}</p>
+                                <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small iran-flag">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- اطلاعات اضافی -->
+                    <div class="additional-info-container">
+                        <!-- جزییات -->
+                        <div class="info-box">
+                            <h3>Details</h3>
+                                <p style="display: flex; align-items: center;">
+                                    Wortart: <span class="word-type-bold" style="margin-right: 5px;">{{ word.get_word_type_display }}</span>
+                                    {% if word.word_type == 'verb' %}
+                                        <button class="verb-konjugation-btn" onclick="goToVerbConjugation('{{ word.german_word }}')">
+                                            Verbkonjugation
+                                        </button>
+                                    {% endif %}
+                                </p>
+                           <!-- <p>Wortart: <span class="word-type-bold">{{ word.get_word_type_display }}</span></p>-->
+
+                            {% if word.word_type == 'noun' %}
+                                <p>Plural Form: <span class="word-type-bold">{{ word.plural_form }}</span></p>
+                                <p>Genitive Form: <span class="word-type-bold">{{ word.genitive_form }}</span></p>
+                            {% elif word.word_type == 'verb' %}
+                                <p>Simple Past: <span class="word-type-bold">{{ word.simple_past }}</span></p>
+                                <p>Perfekt-Partizip: <span class="word-type-bold">{{ word.past_participle }}</span></p>
+                                <p>Hilfsverb: <span class="word-type-bold">{{ word.auxiliary_verb }}</span></p>
+                            {% elif word.word_type == 'adjective' %}
+                                <p>Komparativ: <span class="word-type-bold">{{ word.comparative }}</span></p>
+                                <p>Superlativ: <span class="word-type-bold">{{ word.superlative }}</span></p>
+                            {% endif %}
+                        </div>
+
+                        <!-- تعریف -->
+                        <div class="info-box">
+                            <h3>Definition</h3>
+                            <p>{{ word.definition }}</p>
+                        </div>
+
+                        <!-- مترادف‌ها و متضادها -->
+                        <div class="info-box">
+                            <h3>Synonyme und Antonyme</h3>
+                            <div class="synonyme-box">{{ word.synonyms }}</div>
+                            <div class="antonyme-box">{{ word.antonyms }}</div>
+                        </div>
+                    </div>
+
+                    <!-- جملات نمونه -->
+                    <div class="additional-info-container">
+                        <div class="info-box">
+                            <h3>Beispiel</h3>
+                            <div class="sentence-row">
+                                <!-- جمله آلمانی -->
+                                <div class="sentence-column german-sentence">
+                                    <div class="german-flag-text">
+                                        <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                        <p>{{ word.german_example_sentence|linebreaks }}</p>
+                                        {% if word.audio %}
+                                            <button class="play-audio-btn" onclick="playAudio('{{ word.german_example_audio.url }}')">🔊</button>
+                                        {% endif %}
+                                        {% if word.video %}
+                                            <button class="play-video-btn" onclick="playVideo('{{ word.video.url }}')">
+                                                <img src="{% static 'video.png' %}" alt="Video Icon" class="video-icon">
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- جمله انگلیسی -->
+                                <div class="sentence-column english-sentence">
+                                    <div class="english-flag-text">
+                                        <img src="{% static 'united_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                        <p>{{ word.english_example_sentence|linebreaks }}</p>
+                                    </div>
+                                    {% if word.audio %}
+                                        <button class="play-audio-btn" onclick="playAudio('{{ word.english_example_audio.url }}')">🔊</button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- جمله فارسی -->
+                                <div class="sentence-column farsi-sentence">
+                                    <div class="iran-flag-text">
+                                        <p>{{ word.farsi_example_sentence|linebreaks }}</p>
+                                        <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="additional-info-container">
+                        <div class="info-box">
+                            <!-- بخش Anwendung -->
+                            <h3>Anwendung</h3>
+                            <p>{{ word.usage|linebreaks }}</p>
+                        </div>
+                    </div>
+                    <!-- دکمه افزودن به فلش کارت -->
+                    <div class="add-to-flashcards-btn-container">
+                        {% if user.is_authenticated and word.id not in flashcard_ids %}
+                            <form method="post" action="{% url 'add_to_flashcards' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="word_id" value="{{ word.id }}">
+                                <button class="add-to-flashcards-btn" type="submit">Zu Karteikarten hinzufügen</button>
+                            </form>
+                        {% elif user.is_authenticated %}
+                            <p class="flashcard-message">Dieses Wort ist bereits in deinen Flashcards.</p>
+                        {% endif %}
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <p>Keine Ergebnisse gefunden. Bitte versuchen Sie es mit einem anderen Suchbegriff.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</main>
+<script>
+    function goToVerbConjugation(verb) {
+    const baseUrl = "https://verbformen.de/konjugation/";
+    const fullUrl = baseUrl + encodeURIComponent(verb) + ".PDF";
+    window.open(fullUrl, "_blank");
+}
+</script>
+<script src="{% static 'vocabulary/js/playAudio.js' %}"></script>
+<script src="{% static 'vocabulary/js/playVideo.js' %}"></script>
+{% endblock %}

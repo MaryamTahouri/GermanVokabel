@@ -1,0 +1,119 @@
+{% extends "vocabulary/base_generic.html" %}
+
+{% block content %}
+<h2 class="centered-title">Deine Karteikarten</h2>
+<div class="flashcard-container">
+    {% if flashcards %}
+        <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner">
+                <!-- بخش جلوی فلش کارت -->
+                <div class="flashcard-front">
+                    <p id="german-word"></p> <!-- مقداردهی با جاوااسکریپت -->
+                </div>
+
+                <!-- بخش پشت فلش کارت -->
+                <div class="flashcard-back">
+                    <p id="translations"></p> <!-- مقداردهی با جاوااسکریپت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- کنترل‌ها -->
+        <div class="controls">
+            <button id="prev-btn">❮ vorherige</button>
+            <button id="next-btn">nächste ❯</button>
+            <form id="delete-form" method="post">
+                {% csrf_token %}
+                <button id="delete-btn" type="submit">löschen</button>
+            </form>
+        </div>
+    {% else %}
+        <p class="no-flashcards-message">Sie haben keine Karteikarten</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let flashcards = JSON.parse('{{ flashcards|safe|escapejs }}'); // ارسال داده‌ها
+    console.log('Loaded flashcards:', flashcards); // بررسی داده‌ها در کنسول
+
+    let currentIndex = 0;
+
+    function updateFlashcard() {
+        if (flashcards.length === 0) {
+            // اگر فلش‌کارت‌ها خالی است، پیام مناسب نمایش داده شود
+            document.querySelector('.flashcard-container').innerHTML = '<p>Sie haben keine Karteikarten.</p>';
+            return;
+        }
+
+        const germanWord = document.getElementById('german-word');
+        const translations = document.getElementById('translations');
+
+        germanWord.innerText = flashcards[currentIndex].word.german_word;
+        translations.innerHTML = `<strong>English:</strong> ${flashcards[currentIndex].word.english_word || 'Not available'}<br>
+                                   <strong>Persisch:</strong> ${flashcards[currentIndex].word.farsi_word || 'Not available'}`;
+    }
+
+    function showPrevFlashcard() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateFlashcard();
+        }
+    }
+
+    function showNextFlashcard() {
+        if (currentIndex < flashcards.length - 1) {
+            currentIndex++;
+            updateFlashcard();
+        }
+    }
+
+    document.getElementById('flashcard').addEventListener('click', function () {
+        this.classList.toggle('flipped');
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', showPrevFlashcard);
+    document.getElementById('next-btn').addEventListener('click', showNextFlashcard);
+
+    // دکمه حذف فلش‌کارت
+    const deleteButton = document.getElementById('delete-btn');
+    deleteButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const flashcardId = flashcards[currentIndex].id;
+
+        fetch(`/remove-flashcard/${flashcardId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log(data.message);
+
+                // حذف فلش‌کارت از آرایه
+                flashcards.splice(currentIndex, 1);
+
+                if (flashcards.length > 0) {
+                    // اگر هنوز فلش‌کارت وجود دارد، به‌روزرسانی انجام شود
+                    currentIndex = currentIndex === flashcards.length ? currentIndex - 1 : currentIndex;
+                    updateFlashcard();
+                } else {
+                    // اگر فلش‌کارت‌ها خالی شدند، پیام نمایش داده شود
+                    document.querySelector('.flashcard-container').innerHTML = '<p>Sie haben keine Karteikarten</p>';
+                }
+            } else {
+                console.error('Error removing flashcard:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // مقداردهی اولیه
+    updateFlashcard();
+});
+
+</script>
+{% endblock %}

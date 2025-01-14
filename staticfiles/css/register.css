@@ -1,0 +1,98 @@
+/* ظرف فرم ثبت‌نام */
+.form-container {
+    width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* مرکز کردن دکمه و سایر محتوا به صورت افقی */
+}
+
+.help-text {
+    display: block; /* هر جمله در یک خط جداگانه */
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px; /* فاصله بین جمله و کادر بالا */
+    margin-bottom: 2px; /* فاصله بین توضیحات و لیبل بعدی */
+    line-height: 1,2; /* ارتفاع خط مناسب */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold; /* متن پررنگ‌تر شود */
+    margin-bottom: 5px; /* فاصله بین متن و ورودی */
+    font-size: 14px;
+    color: #333; /* رنگ متن */
+}
+
+.input-password {
+    width: 100%; /* عرض کامل */
+    padding: 10px; /* فاصله داخلی */
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding-right: 40px; /* فضای اضافی برای آیکون چشم داخل کادر */
+    position: relative; /* موقعیت نسبی برای تعامل با آیکون */
+}
+
+.input-container {
+    position: relative; /* برای موقعیت‌دهی دقیق آیکون چشم */
+    width: 100%; /* عرض کامل ظرف */
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%; /* قرار دادن در وسط عمودی کادر */
+    right: 10px; /* فاصله از سمت راست */
+    transform: translateY(-50%); /* تنظیم دقیق موقعیت به مرکز */
+    cursor: pointer;
+    font-size: 1.2em; /* اندازه مناسب آیکون */
+    color: #666; /* رنگ مناسب برای آیکون */
+    background: none; /* بدون پس‌زمینه */
+    border: none; /* حذف حاشیه */
+    z-index: 10; /* اطمینان از نمایش بالاتر آیکون */
+}
+
+button.btn {
+    display: block; /* دکمه به صورت بلاک نمایش داده شود */
+    margin: 20px auto; /* به صورت افقی و عمودی وسط‌چین شود */
+    padding: 10px 20px; /* فاصله داخلی مناسب */
+    background-color: #2C7873; /* رنگ پس‌زمینه دکمه */
+    color: white; /* رنگ متن */
+    border: none; /* حذف حاشیه */
+    border-radius: 4px; /* گوشه‌های گرد */
+    font-size: 16px; /* اندازه متن */
+    cursor: pointer; /* نشانگر ماوس به حالت اشاره‌گر */
+    font-weight: bold; /* متن پررنگ */
+    text-align: center; /* تراز متن در دکمه */
+}
+
+button.btn:hover {
+    background-color: #0056b3; /* رنگ هنگام هاور */
+}
+
+button.btn:hover {
+    background-color: #0056b3;
+}
+
+label {
+    display: block;
+    font-weight: bold; /* پررنگ کردن متن */
+    margin-bottom: 10px; /* افزایش فاصله بین لیبل و کادر ورودی */
+    color: #333; /* رنگ مناسب */
+    font-size: 1em; /* اندازه استاندارد */
+    margin-top: 25px; /* فاصله بین متن توضیحی و لیبل بالایی */
+
+}
+
+.form-group:last-of-type {
+    margin-top: 20px; /* افزایش فاصله بین متن‌های توضیحی و Passwort bestätigen */
+}

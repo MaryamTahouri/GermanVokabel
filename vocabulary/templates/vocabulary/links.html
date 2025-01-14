@@ -1,0 +1,10 @@
+{% extends "vocabulary/base_generic.html" %}
+
+{% block content %}
+    <h1 class="centered-title">{{ title }}</h1>
+    <div class="links-container">
+        {% for link in links %}
+            <a href="{{ link }}" target="_blank">{{ link }}</a><br>
+        {% endfor %}
+    </div>
+{% endblock %}

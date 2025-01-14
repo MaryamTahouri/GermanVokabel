@@ -1,0 +1,119 @@
+/* استایل عمومی برای صفحه */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* استایل برای هدر */
+h1 {
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+}
+
+/* استایل لیست */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+/* استایل آیتم‌های لیست */
+li {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* استایل Gender */
+.gender {
+    font-weight: bold;
+    margin-right: 5px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* رنگ‌دهی به Gender */
+.gender.masculine {
+    background-color: #d0e7ff; /* آبی برای مذکر */
+    color: #0056b3;
+}
+
+.gender.feminine {
+    background-color: #ffdce0; /* قرمز برای مؤنث */
+    color: #b30000;
+}
+
+.gender.neutral {
+    background-color: #e6ffe6; /* سبز برای خنثی */
+    color: #006600;
+}
+
+/* استایل برای عنوان کلمه */
+li h2 {
+    font-size: 1.8em;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+/* استایل متن‌ها */
+li p {
+    margin: 10px 0;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+/* استایل برای فایل‌های صوتی */
+audio {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Suchformular */
+form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Nachricht bei keinem Ergebnis */
+.message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #ff0000;
+    margin-bottom: 20px;
+}

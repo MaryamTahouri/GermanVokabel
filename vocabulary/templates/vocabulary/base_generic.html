@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <img src="{% static 'LOGO.png' %}" alt="Logo" class="rounded-logo">
+        <h1 class="header-title">Mary GermanVokabel</h1>
+    </div>
+        <nav>
+            <a href="{% url 'home' %}" class="nav-item">Startseite</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'flashcards' %}" class="nav-item">My Flashcards</a>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-item" style="background:none;border:none;cursor:pointer;">Abmelden</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-item">Anmelden</a>
+                <a href="{% url 'register' %}" class="nav-item">Registrieren</a>
+            {% endif %}
+
+            <!-- منوی کشویی -->
+            <div class="dropdown">
+                <button class="dropbtn nav-item">Nützliche Links</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'grammatik_links' %}">Grammatik</a>
+                    <a href="{% url 'redewendung_links' %}">Redewendung</a>
+                    <a href="{% url 'nomen_verbindung_links' %}">Nomen Verbindung</a>
+                    <a href="{% url 'wörterbuch_links' %}">Wörterbuch</a>
+                    <a href="{% url 'video_links' %}">Video</a>
+                    <a href="{% url 'podcast_links' %}">Podcast</a>
+                    <a href="{% url 'sonstige_links' %}">Sonstige</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

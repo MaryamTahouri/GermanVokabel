@@ -1,0 +1,60 @@
+{% extends "vocabulary/base_generic.html" %}
+
+{% load static %} <!-- اضافه کردن این خط برای بارگذاری تگ static -->
+
+{% block title %}Register{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Konto Erstellen</h2>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <!-- Benutzername -->
+        <div class="form-group">
+            <label for="username">Benutzername:</label>
+            <input type="text" id="username" name="username" class="input-password" required>
+        </div>
+        <small class="help-text">Erforderlich. 150 Zeichen oder weniger. Nur Buchstaben, Ziffern und @/./+/-/_.</small>
+
+        <!-- Passwort -->
+        <div class="form-group">
+            <label for="password1">Passwort:</label>
+            <div class="input-container">
+                <input type="password" id="password1" name="password1" class="input-password" required>
+                <span onclick="togglePasswordVisibility('password1')" class="password-toggle">👁️</span>
+            </div>
+        </div>
+        <small class="help-text">Das Passwort darf nicht zu ähnlich zu anderen persönlichen Informationen sein.</small>
+        <small class="help-text">Das Passwort muss mindestens 8 Zeichen enthalten.</small>
+        <small class="help-text">Das Passwort darf nicht allgemein üblich sein.</small>
+        <small class="help-text">Das Passwort darf nicht komplett aus Ziffern bestehen.</small>
+
+        <!-- Passwort bestätigen -->
+        <div class="form-group">
+            <label for="password2">Passwort bestätigen:</label>
+            <div class="input-container">
+                <input type="password" id="password2" name="password2" class="input-password" required>
+                <span onclick="togglePasswordVisibility('password2')" class="password-toggle">👁️</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Konto Erstellen</button>
+    </form>
+</div>
+
+<script>
+    function togglePasswordVisibility(fieldId) {
+        const passwordField = document.getElementById(fieldId);
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+        }
+        else {
+            passwordField.type = 'password';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Vokabel</title>
+    <!-- Link zu Ihrer CSS-Datei -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- jQuery einbinden -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Deine eigene JS-Datei -->
+    <script src="{% static 'vocabulary/admin/js/word_type_dynamic.js' %}"></script>
+</head>
+<body>
+    <header>
+        <h1>Wörterliste</h1>
+    </header>
+
+    <main>
+        <!-- Suchformular -->
+        <form method="get" action="{% url 'search_word' %}">
+            <input type="text" name="query" placeholder="Geben Sie ein deutsches Wort ein..." value="{{ query }}">
+            <button type="submit">Suchen</button>
+        </form>
+
+        <!-- Nachricht bei keinem Ergebnis -->
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <!-- Liste der Wörter -->
+        <ul>
+            {% for word in words %}
+            <li>
+                <!-- کلمه آلمانی -->
+                <!-- Gender قبل از کلمه آلمانی -->
+                {% if word.gender %}
+                    <span class="gender {% if word.gender == 'm' %}masculine{% elif word.gender == 'f' %}feminine{% elif word.gender == 'n' %}neutral{% endif %}">
+                        {% if word.gender == 'm' %} der
+                        {% elif word.gender == 'f' %} die
+                        {% elif word.gender == 'n' %} das
+                        {% endif %}
+                    </span>
+                {% endif %}
+                <p>
+                    <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle">
+                </p>
+                <h2>{{ word.german_word }}</h2>
+                {% if word.audio %}
+                    <p>
+                        <strong>Audio (Deutsches Wort):</strong>
+                        <audio controls>
+                            <source src="{{ word.audio.url }}" type="audio/mpeg">
+                            Ihr Browser unterstützt keine Audio-Wiedergabe.
+                        </audio>
+                    </p>
+                {% endif %}
+
+                <!-- کلمه فارسی -->
+                <p><strong>Persisch:</strong> {{ word.farsi_word }}</p>
+
+                <!-- کلمه انگلیسی -->
+                <p><strong>Englisch:</strong> {{ word.english_word }}</p>
+                {% if word.english_audio %}
+                    <p>
+                        <strong>Audio (Englisches Wort):</strong>
+                        <audio controls>
+                            <source src="{{ word.english_audio.url }}" type="audio/mpeg">
+                            Ihr Browser unterstützt keine Audio-Wiedergabe.
+                        </audio>
+                    </p>
+                {% endif %}
+
+                <!-- جملات نمونه -->
+                <p><strong>Beispielsatz (Deutsch):</strong> {{ word.german_example_sentence }}</p>
+                {% if word.german_example_audio %}
+                    <p>
+                        <strong>Audio (Beispielsatz Deutsch):</strong>
+                        <audio controls>
+                            <source src="{{ word.german_example_audio.url }}" type="audio/mpeg">
+                            Ihr Browser unterstützt keine Audio-Wiedergabe.
+                        </audio>
+                    </p>
+                {% endif %}
+
+                <p><strong>Beispielsatz (Englisch):</strong> {{ word.english_example_sentence }}</p>
+                {% if word.english_example_audio %}
+                    <p>
+                        <strong>Audio (Beispielsatz Englisch):</strong>
+                        <audio controls>
+                            <source src="{{ word.english_example_audio.url }}" type="audio/mpeg">
+                            Ihr Browser unterstützt keine Audio-Wiedergابه.
+                        </audio>
+                    </p>
+                {% endif %}
+
+                <!-- مترادف و متضاد -->
+                <p><strong>Synonyme:</strong> {{ word.synonyms }}</p>
+                <p><strong>Antonyme:</strong> {{ word.antonyms }}</p>
+
+                <!-- فایل ویدیو -->
+                {% if word.video %}
+                    <p><strong>Video:</strong></p>
+                    <video width="320" height="240" controls>
+                        <source src="{{ word.video.url }}" type="video/mp4">
+                        Ihr Browser unterstützt keine Video-Wiedergابه.
+                    </video>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>
