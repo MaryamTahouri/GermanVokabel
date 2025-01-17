@@ -3,3 +3,7 @@ venv/
 
 # Ignore Django static files
 staticfiles/
+
+__pycache__/
+*.pyc
+db.sqlite3

@@ -27,9 +27,7 @@ SECRET_KEY = "django-insecure-8ll6t##ux3ei^7o(%a3%2sn*dyw_ek9b_b*7nbz)dhqjw=kcf6
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['127.0.0.1','local host','GermanVokabel.pythonanywhere.com', 'www.GermanVokabel.pythonanywhere.com']
-
-
+ALLOWED_HOSTS = ['127.0.0.1', 'local host', 'GermanVokabel.pythonanywhere.com', 'www.GermanVokabel.pythonanywhere.com']
 
 # Application definition
 
@@ -124,7 +122,7 @@ STATICFILES_FINDERS = [
 
 
 # Statische Dateien (CSS, JavaScript, Bilder)
-STATIC_URL = '/static/' # URL-Präfix für statische Dateien
+STATIC_URL = '/static/'  # URL-Präfix für statische Dateien
 
 # Lokale statische Dateien für dein Projekt
 STATICFILES_DIRS = [
@@ -150,5 +148,3 @@ SESSION_COOKIE_AGE = 300  # زمان اعتبار کوکی به ثانیه (5 د
 SESSION_COOKIE_SECURE = False  # در محیط توسعه برای HTTP خاموش
 SESSION_COOKIE_HTTPONLY = True  # جلوگیری از دسترسی جاوااسکریپت به کوکی‌ها
 SESSION_SAVE_EVERY_REQUEST = True  # تمدید زمان سشن در هر درخواست
-
-
