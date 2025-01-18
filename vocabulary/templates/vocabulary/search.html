@@ -50,7 +50,7 @@
                         <!-- ستون انگلیسی -->
                         <div class="result-column center-column">
                             <div class="english-flag-text">
-                                <img src="{% static 'United_Kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                <img src="{% static 'United_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
                                 <p>{{ word.english_word }}</p>
                                 {% if word.english_audio %}
                                     <button class="play-audio-btn" onclick="playAudio('{{ word.english_audio.url }}')">🔊</button>
@@ -133,7 +133,7 @@
                                 <!-- جمله انگلیسی -->
                                 <div class="sentence-column english-sentence">
                                     <div class="english-flag-text">
-                                        <img src="{% static 'United_Kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                        <img src="{% static 'United_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
                                         <p>{{ word.english_example_sentence|linebreaks }}</p>
                                     </div>
                                     {% if word.audio %}
