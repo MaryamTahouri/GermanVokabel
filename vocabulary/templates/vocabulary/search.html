@@ -10,7 +10,7 @@
         <div class="search-container">
             <div class="flag-container">
                 <img src="{% static 'Germany.png' %}" alt="Germany Flag" class="flag-circle-small">
-            </div>g
+            </div>
             <input type="text" name="query" placeholder="Geben Sie ein deutsches Wort ein..." value="{{ query }}">
             <button type="submit">🔍</button>
         </div>
@@ -50,7 +50,7 @@
                         <!-- ستون انگلیسی -->
                         <div class="result-column center-column">
                             <div class="english-flag-text">
-                                <img src="{% static 'united_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
+                                <img src="{% static 'United_kingdom.png' %}" alt="UK Flag" class="flag-circle-small">
                                 <p>{{ word.english_word }}</p>
                                 {% if word.english_audio %}
                                     <button class="play-audio-btn" onclick="playAudio('{{ word.english_audio.url }}')">🔊</button>
@@ -62,7 +62,7 @@
                         <div class="result-column right-column">
                             <div class="iran-flag-text">
                                 <p>{{ word.farsi_word }}</p>
-                                <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small iran-flag">
+                                <img src="{% static 'Iran.png' %}" alt="Iran Flag" class="flag-circle-small iran-flag">
                             </div>
                         </div>
                     </div>
@@ -145,7 +145,7 @@
                                 <div class="sentence-column farsi-sentence">
                                     <div class="iran-flag-text">
                                         <p>{{ word.farsi_example_sentence|linebreaks }}</p>
-                                        <img src="{% static 'iran.png' %}" alt="Iran Flag" class="flag-circle-small">
+                                        <img src="{% static 'Iran.png' %}" alt="Iran Flag" class="flag-circle-small">
                                     </div>
                                 </div>
                             </div>

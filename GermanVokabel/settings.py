@@ -126,7 +126,7 @@ STATIC_URL = '/static/'  # URL-Präfix für statische Dateien
 
 # Lokale statische Dateien für dein Projekt
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '/static'),  # مسیر فولدر static در اپ vocabulary
+    os.path.join(BASE_DIR, 'static'),  # مسیر فولدر static در اپ vocabulary
 ]
 # Speicherort für gesammelte statische Dateien (durch 'collectstatic')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -134,7 +134,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # MEDIA-Dateien (Audio, Videos, Bilder)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
