@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-8ll6t##ux3ei^7o(%a3%2sn*dyw_ek9b_b*7nbz)dhqjw=kcf6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['127.0.0.1', 'local host', 'GermanVokabel.pythonanywhere.com', 'www.GermanVokabel.pythonanywhere.com']
@@ -126,7 +126,7 @@ STATIC_URL = '/static/'  # URL-Präfix für statische Dateien
 
 # Lokale statische Dateien für dein Projekt
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'vocabulary/static'),  # مسیر فولدر static در اپ vocabulary
+    os.path.join(BASE_DIR, '/static'),  # مسیر فولدر static در اپ vocabulary
 ]
 # Speicherort für gesammelte statische Dateien (durch 'collectstatic')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -134,7 +134,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # MEDIA-Dateien (Audio, Videos, Bilder)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../vocabulary/static/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
 
 
 # Default primary key field type

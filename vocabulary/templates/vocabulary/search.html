@@ -9,8 +9,8 @@
     <form method="get" action="{% url 'search_word' %}" class="search-form">
         <div class="search-container">
             <div class="flag-container">
-                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
-            </div>
+                <img src="{% static 'Germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+            </div>g
             <input type="text" name="query" placeholder="Geben Sie ein deutsches Wort ein..." value="{{ query }}">
             <button type="submit">🔍</button>
         </div>
@@ -26,7 +26,7 @@
                         <!-- ستون آلمانی -->
                         <div class="result-column left-column">
                             <div class="german-flag-text">
-                                <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                <img src="{% static 'Germany.png' %}" alt="Germany Flag" class="flag-circle-small">
                                 {% if word and word.gender %}
                                     <span class="gender {% if word.gender == 'm' %}masculine{% elif word.gender == 'f' %}feminine{% elif word.gender == 'n' %}neutral{% endif %}">
                                         {% if word.gender == 'm' %} der
@@ -117,7 +117,7 @@
                                 <!-- جمله آلمانی -->
                                 <div class="sentence-column german-sentence">
                                     <div class="german-flag-text">
-                                        <img src="{% static 'germany.png' %}" alt="Germany Flag" class="flag-circle-small">
+                                        <img src="{% static 'Germany.png' %}" alt="Germany Flag" class="flag-circle-small">
                                         <p>{{ word.german_example_sentence|linebreaks }}</p>
                                         {% if word.audio %}
                                             <button class="play-audio-btn" onclick="playAudio('{{ word.german_example_audio.url }}')">🔊</button>
