@@ -127,6 +127,7 @@ STATIC_URL = '/static/'  # URL-Präfix für statische Dateien
 # Lokale statische Dateien für dein Projekt
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # مسیر فولدر static در اپ vocabulary
+
     #os.path.join(BASE_DIR, 'vocabulary/static'),
 ]
 # Speicherort für gesammelte statische Dateien (durch 'collectstatic')
