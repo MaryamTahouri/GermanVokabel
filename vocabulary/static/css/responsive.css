@@ -3,28 +3,70 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
+        padding: 10px;
     }
 
-    .header-content {
-        flex-direction: column;
-        align-items: center;
+    .header-content img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .header-title {
+        font-size: 1.2rem;
+        text-align: center;
     }
 
     .nav-item {
         font-size: 1rem;
         margin: 5px;
+        display: block;
+        text-align: center;
     }
 
     .search-container {
-        width: 90%;
+        width: 100%;
+        margin: 10px auto;
+        padding: 5px;
+    }
+
+    .search-container input[type="text"] {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    .search-container button {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
     }
 
     .flashcard {
-        width: 90%;
-        font-size: 14px;
+        width: 100%;
+        font-size: 12px;
+        margin: 10px 0;
+    }
+
+    .flashcard-inner {
+        padding: 10px;
     }
 
     .dropdown-content {
         position: relative;
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown-content a {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        padding: 10px;
     }
 }
