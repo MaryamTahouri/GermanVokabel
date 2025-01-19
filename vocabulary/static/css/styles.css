@@ -1,4 +1,3 @@
-
 /* تنظیمات کلی */
 body {
     font-family: Arial, sans-serif;
@@ -292,13 +291,13 @@ input:-webkit-autofill {
 
 .german-flag-text h2 {
     margin: 0;
-    font-size: 32px;
+    font-size: 2rem;
 
 }
 
 /* نوع کلمه در داخل پرانتز */
 .word-type {
-    font-size: 16px;
+    font-size: 1rem;
     color: gray;
     margin-left: 5px; /* فاصله از کلمه */
     font-style: italic; /* ظاهر ایتالیک برای تأکید */
@@ -322,7 +321,7 @@ input:-webkit-autofill {
 .english-flag-text p {
     font-style: normal;
     margin: 0;
-    font-size: 32px;
+    font-size: 2rem;
 }
 
 
@@ -346,14 +345,14 @@ input:-webkit-autofill {
 .iran-flag-text p {
     font-style: normal;
     margin: 0;
-    font-size: 32px;
+    font-size: 2rem;
     order: 1; /* متن قبل از پرچم قرار گیرد */
 }
 
 .play-audio-btn {
     background: none;
     border: none;
-    font-size: 1.32px;
+    font-size: 1.2rem;
     cursor: pointer;
     color: #333;
     order: 1;
@@ -398,7 +397,7 @@ input:-webkit-autofill {
 }
 
 .word-type-bold {
-    font-size: 1.32px; /* تنظیم اندازه متن */
+    font-size: 1.2rem; /* تنظیم اندازه متن */
     color: #cd2990; /* رنگ دلخواه */
 }
 
@@ -428,7 +427,7 @@ input:-webkit-autofill {
 }
 
 .info-box h3 {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-bottom: 30px;
     color: #cd2990;
     border-bottom: 2px solid #cd2990;
@@ -438,7 +437,7 @@ input:-webkit-autofill {
 
 .info-box p {
     margin: 5px 0;
-    font-size: 1.32px;
+    font-size: 1.2rem;
     color: #003b46;
 
 }
@@ -468,7 +467,7 @@ input:-webkit-autofill {
 .synonyme-box {
     background-color: #4B91E6; /* رنگ آبی زمینه */
     color: black; /* رنگ متن */
-    font-size: 1.32px;
+    font-size: 1.2rem;
     padding: 10px; /* فضای داخلی */
     border-radius: 5px; /* گوشه‌های گرد */
     margin-bottom: 10px; /* فاصله از Antonyme */
@@ -478,7 +477,7 @@ input:-webkit-autofill {
 .antonyme-box {
     background-color: #E64B4B; /* رنگ  زمینه */
     color: black; /* رنگ متن */
-    font-size: 1.32px;
+    font-size: 1.2rem;
     padding: 10px; /* فضای داخلی */
     border-radius: 5px; /* گوشه‌های گرد */
 }
@@ -508,7 +507,7 @@ input:-webkit-autofill {
     background-color: #4B918D; /* رنگ پس‌زمینه هماهنگ */
     color: #fff; /* رنگ متن */
     padding: 5px 15px; /* فاصله داخلی */
-    font-size: 16px; /* اندازه متن */
+    font-size: 1rem; /* اندازه متن */
     font-weight: bold; /* ضخامت فونت */
     border-radius: 20px; /* لبه‌های گرد */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* سایه برای زیبایی */
@@ -586,7 +585,7 @@ img.video-icon {
     padding: 20px 20px; /* فضای داخلی */
     border-radius: 10px; /* گرد کردن گوشه‌ها */
     cursor: pointer;
-    font-size: 1.32px;
+    font-size: 1.2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
@@ -608,7 +607,7 @@ img.video-icon {
 .centered-title {
     text-align: center; /* تراز متن به مرکز */
     margin-top: 20px; /* فاصله از بالا */
-    font-size: 24px; /* اندازه فونت */
+    font-size: 1.5rem; /* اندازه فونت */
     color: #003b46; /* رنگ متن */
 }
 
@@ -625,7 +624,7 @@ img.video-icon {
 .centered-title {
     text-align: center;
     margin-top: 20px;
-    font-size: 32px;
+    font-size: 2rem;
     color: #003b46;
 }
 
@@ -684,7 +683,6 @@ img.video-icon {
     overflow: hidden;
 }
 
-
 .flashcard-inner {
     transition: transform 0.6s;
     transform-style: preserve-3d;
@@ -740,7 +738,7 @@ img.video-icon {
 .links-container a {
     color: #003b46; /* رنگ لینک‌ها */
     text-decoration: none; /* حذف زیرخط لینک */
-    font-size: 24px; /* اندازه متن */
+    font-size: 1.5rem; /* اندازه متن */
     display: block; /* هر لینک در یک خط جداگانه */
     margin-bottom: 5px; /* فاصله بین لینک‌ها */
     margin-left: 50px; /* فاصله بین لینک‌ها */
