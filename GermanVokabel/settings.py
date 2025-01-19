@@ -152,3 +152,4 @@ SESSION_COOKIE_AGE = 300  # زمان اعتبار کوکی به ثانیه (5 د
 SESSION_COOKIE_SECURE = False  # در محیط توسعه برای HTTP خاموش
 SESSION_COOKIE_HTTPONLY = True  # جلوگیری از دسترسی جاوااسکریپت به کوکی‌ها
 SESSION_SAVE_EVERY_REQUEST = True  # تمدید زمان سشن در هر درخواست
+
