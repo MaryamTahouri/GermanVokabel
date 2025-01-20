@@ -749,3 +749,45 @@ img.video-icon {
     color: lightblue; /* تغییر رنگ هنگام هاور */
     text-decoration: underline; /* نمایش زیرخط هنگام هاور */
 }
+
+
+
+/* تنظیمات برای موبایل (عرض کمتر از 600px) */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px; /* کاهش اندازه متن برای موبایل */
+        padding: 10px; /* فاصله داخلی مناسب */
+    }
+
+    header {
+        flex-direction: column; /* هدر به صورت ستونی تنظیم شود */
+        align-items: center; /* محتوا وسط‌چین شود */
+        height: auto; /* ارتفاع خودکار */
+    }
+
+    .nav-item {
+        font-size: 1em; /* کاهش اندازه فونت لینک‌ها */
+        padding: 5px; /* کاهش فاصله داخلی لینک‌ها */
+    }
+
+    .results-container, .additional-info-container {
+        padding: 10px; /* کاهش فاصله داخلی */
+        margin: 10px; /* فاصله کمتر از اطراف */
+    }
+}
+
+/* تنظیمات برای تبلت (عرض بین 600px تا 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body {
+        font-size: 16px; /* اندازه متن متوسط */
+        padding: 15px;
+    }
+
+    .form-container, .login-container {
+        width: 80%; /* عرض فرم برای تبلت */
+    }
+
+    header {
+        padding: 20px;
+    }
+}
