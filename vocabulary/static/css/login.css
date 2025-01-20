@@ -75,3 +75,27 @@ button.btn:hover {
     font-size: 1.2em; /* اندازه آیکون */
     color: #666; /* رنگ آیکون */
 }
+
+
+@media (max-width: 600px) {
+    .login-container {
+        width: 90%; /* عرض فرم در موبایل */
+        padding: 15px;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 14px; /* کاهش اندازه ورودی‌ها */
+        padding: 8px; /* کاهش فاصله داخلی */
+    }
+
+    button.btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .login-container {
+        width: 75%; /* عرض فرم در تبلت */
+    }
+}
