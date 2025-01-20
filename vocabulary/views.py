@@ -11,16 +11,24 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # ورود خودکار کاربر
-            return redirect('home')  # هدایت به صفحه اصلی
+            login(request, user)
+            logger.info(f"New user created: {user.username}")
+            return redirect('home')
+        else:
+            logger.error(f"Form errors: {form.errors}")
     else:
         form = RegisterForm()
     return render(request, 'vocabulary/register.html', {'form': form})
+
 
 
 def custom_logout(request):
