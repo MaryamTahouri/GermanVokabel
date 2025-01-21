@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-8ll6t##ux3ei^7o(%a3%2sn*dyw_ek9b_b*7nbz)dhqjw=kcf6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['127.0.0.1', 'local host', 'GermanVokabel.pythonanywhere.com', 'www.GermanVokabel.pythonanywhere.com']
@@ -148,7 +148,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # استفاده از سشن‌های دیتابیس
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # بستن مرورگر باعث انقضای سشن شود
-SESSION_COOKIE_AGE = 300  # زمان اعتبار کوکی به ثانیه (5 دقیقه)
+SESSION_COOKIE_AGE = 3600  # زمان اعتبار کوکی به ثانیه (5 دقیقه)
 SESSION_COOKIE_SECURE = False  # در محیط توسعه برای HTTP خاموش
 SESSION_COOKIE_HTTPONLY = True  # جلوگیری از دسترسی جاوااسکریپت به کوکی‌ها
 SESSION_SAVE_EVERY_REQUEST = True  # تمدید زمان سشن در هر درخواست
