@@ -148,7 +148,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # استفاده از سشن‌های دیتابیس
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # بستن مرورگر باعث انقضای سشن شود
-SESSION_COOKIE_AGE = 3600  # زمان اعتبار کوکی به ثانیه (5 دقیقه)
+SESSION_COOKIE_AGE = 3600  # زمان اعتبار کوکی به ثانیه (1 Sunde)
 SESSION_COOKIE_SECURE = False  # در محیط توسعه برای HTTP خاموش
 SESSION_COOKIE_HTTPONLY = True  # جلوگیری از دسترسی جاوااسکریپت به کوکی‌ها
 SESSION_SAVE_EVERY_REQUEST = True  # تمدید زمان سشن در هر درخواست
